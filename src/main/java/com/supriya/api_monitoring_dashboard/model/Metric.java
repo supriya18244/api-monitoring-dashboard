@@ -1,4 +1,4 @@
-package com.supriya.apimonitoringdashboard.model;
+package com.supriya.api_monitoring_dashboard.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
