@@ -25,4 +25,19 @@ public class MetricController {
     public List<Metric> getMetrics(){
         return metricService.getAllMetrics();
     }
+
+    @GetMapping("/api/{apiName}")
+    public List<Metric> getByApiName(@PathVariable String apiName) {
+        return metricService.getByApiName(apiName);
+    }
+
+    @GetMapping("/status/{status}")
+    public List<Metric> getByStatus(@PathVariable String status) {
+        return metricService.getByStatus(status);
+    }
+
+    @GetMapping("/slow")
+    public List<Metric> getSlowApis(@RequestParam long threshold) {
+        return metricService.getSlowApis(threshold);
+    }
 }

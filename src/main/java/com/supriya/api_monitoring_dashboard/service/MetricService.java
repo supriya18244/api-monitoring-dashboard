@@ -23,4 +23,16 @@ public class MetricService {
     public List<Metric> getAllMetrics(){
         return metricRepository.findAll();
     }
+
+    public List<Metric> getByApiName(String apiName) {
+        return metricRepository.findByApiName(apiName);
+    }
+
+    public List<Metric> getByStatus(String status) {
+        return metricRepository.findByStatus(status);
+    }
+
+    public List<Metric> getSlowApis(long responseTime) {
+        return metricRepository.findByResponseTimeGreaterThan(responseTime);
+    }
 }
