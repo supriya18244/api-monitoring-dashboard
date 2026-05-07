@@ -1,5 +1,6 @@
 package com.supriya.api_monitoring_dashboard.service;
 
+import com.supriya.api_monitoring_dashboard.dto.MetricSummary;
 import com.supriya.api_monitoring_dashboard.model.Metric;
 import com.supriya.api_monitoring_dashboard.repository.MetricRepository;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,27 @@ public class MetricService {
 
     public List<Metric> getSlowApis(long responseTime) {
         return metricRepository.findByResponseTimeGreaterThan(responseTime);
+    }
+
+    public MetricSummary getSummary() {
+
+        List<Metric> metrics = metricRepository.findAll();
+
+        long totalRequests = metrics.size();
+
+        long failedRequests = metrics.stream()
+                .filter(metric -> "FAILURE".equalsIgnoreCase(metric.getStatus()))
+                .count();
+
+        double averageResponseTime = metrics.stream()
+                .mapToLong(Metric::getResponseTime)
+                .average()
+                .orElse(0.0);
+
+        return new MetricSummary(
+                totalRequests,
+                failedRequests,
+                averageResponseTime
+        );
     }
 }
