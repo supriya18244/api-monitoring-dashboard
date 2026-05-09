@@ -1,5 +1,6 @@
 package com.supriya.api_monitoring_dashboard.service;
 
+import com.supriya.api_monitoring_dashboard.dto.AlertResponse;
 import com.supriya.api_monitoring_dashboard.dto.MetricSummary;
 import com.supriya.api_monitoring_dashboard.model.Metric;
 import com.supriya.api_monitoring_dashboard.repository.MetricRepository;
@@ -57,5 +58,38 @@ public class MetricService {
                 failedRequests,
                 averageResponseTime
         );
+    }
+
+    public List<AlertResponse> getAlerts() {
+
+        List<Metric> metrics = metricRepository.findAll();
+
+        return metrics.stream()
+                .filter(metric ->
+                        metric.getResponseTime() > 500 ||
+                                "FAILURE".equalsIgnoreCase(metric.getStatus())
+                )
+                .map(metric -> {
+
+                    String severity;
+
+                    if ("FAILURE".equalsIgnoreCase(metric.getStatus())) {
+                        severity = "HIGH";
+                    } else if (metric.getResponseTime() > 1000) {
+                        severity = "HIGH";
+                    } else if (metric.getResponseTime() > 500) {
+                        severity = "MEDIUM";
+                    } else {
+                        severity = "LOW";
+                    }
+
+                    return new AlertResponse(
+                            metric.getApiName(),
+                            metric.getResponseTime(),
+                            metric.getStatus(),
+                            severity
+                    );
+                })
+                .toList();
     }
 }

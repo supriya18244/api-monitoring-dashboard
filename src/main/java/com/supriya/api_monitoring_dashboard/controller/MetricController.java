@@ -1,5 +1,6 @@
 package com.supriya.api_monitoring_dashboard.controller;
 
+import com.supriya.api_monitoring_dashboard.dto.AlertResponse;
 import com.supriya.api_monitoring_dashboard.model.Metric;
 import com.supriya.api_monitoring_dashboard.service.MetricService;
 import org.springframework.web.bind.annotation.*;
@@ -45,5 +46,10 @@ public class MetricController {
     @GetMapping("/summary")
     public MetricSummary getSummary() {
         return metricService.getSummary();
+    }
+
+    @GetMapping("/alerts")
+    public List<AlertResponse> getAlerts() {
+        return metricService.getAlerts();
     }
 }
